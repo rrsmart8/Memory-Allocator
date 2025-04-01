@@ -2,7 +2,7 @@
 
 A simple yet powerful dynamic memory management system that mimics the behavior of `malloc`, `free`, `calloc`, and `realloc`, tailored for both **small** and **large** memory allocations.
 
-![Memory Allocator Diagram](./images/memory_block.png)
+![Memory Allocator Diagram](./memory_block.png)
 
 ---
 
