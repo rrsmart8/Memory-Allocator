@@ -1,40 +1,91 @@
-# Memory-Allocator
+# Memory Allocator
 
+A simple yet powerful dynamic memory management system that mimics the behavior of `malloc`, `free`, `calloc`, and `realloc`, tailored for both **small** and **large** memory allocations.
 
-# Summary 
+![Memory Allocator Diagram](./images/memory_block.png)
 
-This memory allocator is a basic implementation of dynamic memory management system, providing functionalities similar to malloc, free, calloc, and realloc. The allocator is designed to work with both small and large memory allocations, utilizing different strategies based on the size of the requested memory.
+---
 
-# Usage 
+## 🚀 Features
 
-To use the memory allocator, include the "osmem.h" header file in your C program and link it with the corresponding source file. The provided functions (os_malloc, os_free, os_calloc, os_realloc) can then be used for dynamic memory management.
+- Custom `malloc`, `free`, `calloc`, `realloc` functions using data structures
+-  Memory coalescing to reduce fragmentation
+-  Block splitting for efficient space use
+- Separate strategies for small & large allocations
 
-# Functions 
+---
 
+## Usage
 
-1. void *os_malloc(size_t size)
-Allocates a block of memory of the specified size. The implementation uses different strategies based on the size of the requested memory.
+Include the header and link the implementation file:
 
-2. void os_free(void *ptr)
-Frees the memory block pointed to by the given pointer. The implementation handles both mapped and allocated memory blocks.
+```c
+#include "osmem.h"
+```
 
-3. void *os_calloc(size_t nmemb, size_t size)
-Allocates memory for an array of elements, each initialized to zero. Similar to os_malloc but initializes the allocated memory to zero.
+Then use the custom allocation functions just like standard ones:
 
-4. void *os_realloc(void *ptr, size_t size)
-Changes the size of the memory block pointed to by the given pointer. The implementation handles various scenarios, including reallocating, splitting, and expanding memory.
+```c
+void *ptr = os_malloc(64);
+os_free(ptr);
+```
 
-# Memory Allocation Strategies
-    
-    Small Memory Allocation (< CHUNK size):
-Uses sbrk to allocate memory.
-Preallocates a chunk of memory on the first call.
-Finds a fit in existing free blocks or expands the memory.
-Large Memory Allocation (>= CHUNK size):
-Uses mmap to allocate memory.
-Memory Coalescing:
-Combines adjacent free memory blocks to prevent fragmentation.
-Block Splitting:
-Splits a large memory block into two, with one part allocated and the other part marked as free.
+---
+
+## Functions
+
+### `void *os_malloc(size_t size)`
+> Allocates a block of memory of the specified size.  
+Uses internal data structures to track and deliver usable payloads.
+
+---
+
+### `void os_free(void *ptr)`
+> Frees the memory block pointed to by `ptr`.  
+Handles both `sbrk`-based and `mmap`-based memory allocations.
+
+---
+
+### `void *os_calloc(size_t nmemb, size_t size)`
+> Allocates memory for an array and **initializes it to zero**.  
+Perfect for ensuring clean, zeroed memory.
+
+---
+
+### `void *os_realloc(void *ptr, size_t size)`
+> Resizes a previously allocated block.  
+Handles all edge cases like expansion, shrinking, or creating new blocks.
+
+---
+
+## Memory Allocation Strategies
+
+### Small Allocations (`< CHUNK size`)
+- Uses `sbrk` syscall for linear heap expansion.
+- Preallocates a chunk on first use.
+- Finds suitable free blocks or expands the heap.
+
+### Large Allocations (`>= CHUNK size`)
+- Uses `mmap` syscall for direct mapping of large memory blocks.
+
+---
+
+## Optimizations
+
+### Memory Coalescing
+> Adjacent free blocks are **merged** to prevent fragmentation.
+
+###  Block Splitting
+> Large blocks are **split** into smaller parts when possible.
+
+---
+
+## 📁 File Structure
+
+```
+├── osmem.h         # Header file with function declarations
+├── osmem.c         # Implementation of the memory allocator
+└── README.md       # You are here!
+```
 
 
