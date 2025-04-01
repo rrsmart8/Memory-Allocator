@@ -6,7 +6,7 @@ A simple yet powerful dynamic memory management system that mimics the behavior 
 
 ---
 
-## 🚀 Features
+##  Features
 
 - Custom `malloc`, `free`, `calloc`, `realloc` functions using data structures
 -  Memory coalescing to reduce fragmentation
